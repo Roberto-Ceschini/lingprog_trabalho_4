@@ -38,8 +38,8 @@ Todas as operações disponíveis na interface interativa foram mapeadas diretam
 1. **Cadastrar Novo Veículo na Frota:** Instancia dinamicamente um objeto do tipo escolhido (`Carro`, `Caminhao` ou `Moto`) e o insere na árvore utilizando a sobrecarga do `operator+`.
 2. **Buscar Veículo por Placa:** Localiza um veículo específico na árvore binária por meio da sobrecarga do `operator()(placa)`. Caso a placa não exista, o sistema lança e trata a exceção customizada `VeiculoNaoEncontrado`.
 3. **Atualizar Quilometragem de um Veículo:** Modifica diretamente em memória a quilometragem de um veículo localizado por sua placa através do `operator()(placa, novaQuilometragem)`. Também conta com tratamento de erro contra ponteiros nulos.
-4. **Exibir Todos os Veículos da Frota:** Dispara a sobrecarga do `operator<<` de forma cascateada (`Frota` -> `Arvore` -> `Veiculo`). A árvore realiza um percurso *In-Order* (Em-Ordem) para exibir as propriedades polimórficas de cada subclasse ordenadas de forma alfabética decrescente por placa.
-5. **Calcular Custo Médio de Manutenção por Tipo:** Executa um algoritmo de busca em profundidade (*DFS*) recursivo na árvore para acumular e exibir, de forma polimórfica via `calculaCustoManutencao()`, a média exata de gastos de manutenção agrupada por categorias.
+4. **Exibir Todos os Veículos da Frota:** Dispara a sobrecarga do `operator<<` de forma cascateada (`Frota` -> `Arvore` -> `Veiculo`). A árvore realiza um percurso para exibir de forma alfabética decrescente por placa.
+5. **Calcular Custo Médio de Manutenção por Tipo:** `calculaCustoManutencao()`, a média exata de gastos de manutenção agrupada por categorias.
 
 ---
 
