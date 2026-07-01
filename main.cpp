@@ -1,44 +1,142 @@
 #include <iostream>
+#include <string>
 #include "Frota.h"
+#include "Carro.h"
 #include "Caminhao.h"
+#include "Moto.h"
+#include "VeiculoNaoEncontrado.h"
 
 using namespace std;
 
+
+void exibeMenu() {
+    cout << "\n================ MENU DE GERENCIAMENTO ================" << endl;
+    cout << "1. Cadastrar Novo Veiculo na Frota" << endl;
+    cout << "2. Buscar Veiculo por Placa" << endl;
+    cout << "3. Atualizar Quilometragem de um Veiculo" << endl;
+    cout << "4. Exibir Todos os Veiculos da Frota" << endl;
+    cout << "5. Calcular Custo Medio de Manutencao por Tipo" << endl;
+    cout << "0. Sair do Programa" << endl;
+    cout << "=======================================================" << endl;
+    cout << "Escolha uma opcao: ";
+}
+
 int main() {
-    // 1. Criamos nossa Frota
     Frota minhaFrota;
+    int opcao = -1;
 
-    // 2. Criamos caminhões de forma dinâmica (ponteiros) para suportar polimorfismo
-    Veiculo* c1 = new Caminhao("MNO5678", "Volvo", 150000.0, 2000.0, 20.0);
-    Veiculo* c2 = new Caminhao("ABC1234", "Scania", 80000.0, 1500.0, 15.0);
-    Veiculo* c3 = new Caminhao("XYZ9999", "Mercedes", 200000.0, 3000.0, 30.0);
+   
+    string placa, marca;
+    double km, custoBase;
 
-    cout << "--- Inserindo os veiculos na frota ---" << endl;
-    // Testa o método insere que delega para o operator+ da árvore
-    minhaFrota.insere(c1);
-    minhaFrota.insere(c2);
-    minhaFrota.insere(c3);
+    while (opcao != 0) {
+        exibeMenu();
+        cin >> opcao;
 
-    // 3. Testa a impressão completa (Efeito cascata: Frota -> Arvore -> Caminhao)
-    cout << "\n*** Estado Atual da Frota (Impressao em Ordem) ***" << endl;
-    minhaFrota.imprime(); 
+        
+        cin.ignore();
 
-    // 4. Testa a Busca via operator() da Frota
-    cout << "\n--- Testando a busca por placa ---" << endl;
-    Veiculo* buscado = minhaFrota("ABC1234");
-    if (buscado != nullptr) {
-        cout << "Veiculo encontrado diretamente pelo operador:\n" << *buscado << endl;
+        switch (opcao) {
+            case 1: {
+                int tipo;
+                cout << "\n--- Cadastrar Veiculo ---" << endl;
+                cout << "Selecione o tipo (1-Carro, 2-Caminhao, 3-Moto): ";
+                cin >> tipo;
+                cin.ignore();
+
+                if (tipo < 1 || tipo > 3) {
+                    cout << "Opcao de tipo invalida! Retornando ao menu." << endl;
+                    break;
+                }
+
+                cout << "Digite a Placa: ";
+                getline(cin, placa);
+                cout << "Digite a Marca: ";
+                getline(cin, marca);
+                cout << "Digite a Quilometragem Atual: ";
+                cin >> km;
+                cout << "Digite o Custo Base de Manutencao: ";
+                cin >> custoBase;
+
+                if (tipo == 1) {
+                    int portas;
+                    cout << "Digite a quantidade de portas: ";
+                    cin >> portas;
+                    minhaFrota.insere(new Carro(placa, marca, km, custoBase, portas));
+                } 
+                else if (tipo == 2) {
+                    double carga;
+                    cout << "Digite a capacidade de carga (toneladas): ";
+                    cin >> carga;
+                    minhaFrota.insere(new Caminhao(placa, marca, km, custoBase, carga));
+                } 
+                else if (tipo == 3) {
+                    int cilindradas;
+                    cout << "Digite as cilindradas (cc): ";
+                    cin >> cilindradas;
+                    minhaFrota.insere(new Moto(placa, marca, km, custoBase, cilindradas));
+                }
+
+                cout << ">>> Veiculo cadastrado e inserido com sucesso na Arvore! <<<" << endl;
+                break;
+            }
+
+            case 2: {
+                cout << "\n--- Buscar Veiculo por Placa ---" << endl;
+                cout << "Digite a placa desejada: ";
+                getline(cin, placa);
+
+           
+                try {
+                    Veiculo* v = minhaFrota(placa);
+                    cout << "\n[Veiculo Encontrado]:" << endl;
+                    cout << *v << endl;
+                } 
+                catch (const VeiculoNaoEncontrado& e) {
+                    cout << "\n" << e.what() << endl;
+                }
+                break;
+            }
+
+            case 3: {
+                cout << "\n--- Atualizar Quilometragem ---" << endl;
+                cout << "Digite a placa do veiculo: ";
+                getline(cin, placa);
+                cout << "Digite a nova quilometragem: ";
+                cin >> km;
+
+                try {
+                    minhaFrota(placa, km);
+                    cout << ">>> Quilometragem atualizada com sucesso! <<<" << endl;
+                } 
+                catch (const VeiculoNaoEncontrado& e) {
+                    cout << "\n" << e.what() << endl;
+                }
+                break;
+            }
+
+            case 4: {
+                cout << "\n*** Relatorio Completo da Frota (Ordenado por Placa Invertida) ***" << endl;
+                minhaFrota.imprime();
+                cout << "*****************************************************************" << endl;
+                break;
+            }
+
+            case 5: {
+              
+                minhaFrota.calculaCustoManutencao();
+                break;
+            }
+
+            case 0:
+                cout << "\nEncerrando sistema!" << endl;
+                break;
+
+            default:
+                cout << "Opcao invalida! Tente novamente." << endl;
+                break;
+        }
     }
-
-    // 5. Testa a Atualização de Quilometragem via operator() com dois argumentos
-    cout << "\n--- Atualizando quilometragem do ABC1234 para 95000.0 ---" << endl;
-    minhaFrota("ABC1234", 95000.0);
-
-    // 6. Imprime novamente para conferir se alterou o objeto real guardado na árvore
-    cout << "\n*** Frota Apos Atualizacao ***" << endl;
-    minhaFrota.imprime();
-
-    // Liberação básica da memória (Em um projeto completo, o destrutor da árvore cuidaria disso)
 
     return 0;
 }

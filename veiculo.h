@@ -17,7 +17,7 @@ class Veiculo {
 
         void atualizaQuilometragem(double);
 
-        // Operadores de comparação (objeto vs objeto)
+        // Operadores de comparacao (objeto vs objeto)
         bool operator>(const Veiculo& outro) const;
         bool operator==(const Veiculo& outro) const;
 
@@ -33,7 +33,7 @@ class Veiculo {
         double quilometragem;
         double custoManutencao;
 
-        // Método virtual auxiliar para permitir que as classes filhas estendam a impressão
+        //virtual para que cada veiculo possa implementar sua impressao, por causa dos atributos adicionais (ex: capacidade de carga, etc)
         virtual void imprime(ostream& os) const;
 };
 

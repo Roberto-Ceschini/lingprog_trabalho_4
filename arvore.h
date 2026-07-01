@@ -32,14 +32,18 @@ public:
         return busca(raiz, chave);
     }
 
-    void imprime() const
-    {
-        imprime(raiz);
-    }
+    // void imprime() const
+    // {
+    //     imprime(raiz);
+    // }
 
     friend ostream& operator<<(ostream& os, const Arvore<T>& arvore) {
             arvore.imprimeEmOrdem(arvore.raiz, os);
             return os;
+    }
+
+    no* getRaiz() const {
+        return raiz;
     }
 
 private:

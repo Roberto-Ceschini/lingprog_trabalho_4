@@ -1,8 +1,17 @@
-#include <exception>
+#ifndef VEICULO_NAO_ENCONTRADO_H
+#define VEICULO_NAO_ENCONTRADO_H
 
-class VeiculoNaoEncontrado : public std::exception {
+#include <exception>
+#include <string>
+
+using namespace std;
+
+class VeiculoNaoEncontrado : public exception {
     public:
-        const char* what() const noexcept override {
-            return "Erro: veículo não encontrado no sistema.";
+        
+        virtual const char* what() const throw() {
+            return "Erro: Veiculo nao encontrado no sistema.";
         }
 };
+
+#endif

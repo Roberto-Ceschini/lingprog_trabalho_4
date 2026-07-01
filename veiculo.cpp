@@ -13,11 +13,11 @@ void Veiculo::atualizaQuilometragem(double novaQuilometragem) {
 // OPERADORES OBJETO vs OBJETO
 
 bool Veiculo::operator>(const Veiculo& outro) const {
-    return this->placa > outro.placa; // Comparação alfabética direta de strings
+    return this->placa > outro.placa; 
 }
 
 bool Veiculo::operator==(const Veiculo& outro) const {
-    return this->placa == outro.placa; // Comparação direta de strings
+    return this->placa == outro.placa;
 }
 
 // OPERADORES OBJETO vs STRING para busca
